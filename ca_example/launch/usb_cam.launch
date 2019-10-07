@@ -1,0 +1,23 @@
+<launch> 
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" > 
+    <param name="video_device" value="/dev/video0" /> 
+    <param name="image_width" value="640" /> 
+    <param name="image_height" value="480" /> 
+    <param name="pixel_format" value="yuyv" /> 
+    <param name="camera_frame_id" value="usb_cam" /> 
+    <!-- <param name="io_method" value="mmap"/>  -->
+    <!--remap from="/usb_cam/image_raw" to="/face_detection/image" /-->
+  </node> 
+  <node name="face_detection" pkg="opencv_apps" type="face_detection" output="screen"> 
+    <param name="face_cascade_name" value="$(find ca_example)/config/haarcascade_frontalface_alt.xml" /> 
+    <param name="eyes_cascade_name" value="$(find ca_example)/config/haarcascade_eye_tree_eyeglasses.xml"/>
+    <!--remap from="/face_detection/image" to="/image"/-->
+    <remap from="image" to="/usb_cam/image_raw" />
+  </node> 
+  <!-- <node name="face_recognition" pkg="opencv_apps" type="face_recognition" output="screen">
+    <param name="face_cascade_name" value="$(find ca_example)/config/haarcascade_frontalface_alt.xml" />
+    <param name="eyes_cascade_name" value="$(find ca_example)/config/haarcascade_eye_tree_eyeglasses.xml"/>
+    <remap from="image" to="/face_detection/image" />
+    <remap from="faces" to="/face_detection/face_image"/>
+  </node> -->
+</launch>
